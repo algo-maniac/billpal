@@ -76,7 +76,7 @@ function Navbar() {
           </Link>
         </li>
       </ul>
-      {!loggedIn ? (
+      {loggedIn ? (
         <div className=" basis-2/3 md:basis-[40%] flex flex-row justify-center">
           <div
             className={`cursor-pointer w-[30px] flex flex-row justify-center items-center bg-blue-700 border-2 border-blue-700 rounded-full font-bold`}
