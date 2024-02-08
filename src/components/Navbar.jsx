@@ -8,13 +8,13 @@ import Image from "next/image";
 
 function Navbar() {
   const [dropdownListActivity, setDropDownListActivity] = useState(0);
-  const [loggedIn, setLoggedIn] = useState(0);
-
+  // const session = await getServerSession(options);
+  const session = false;
   return (
     <nav className="bg-primary text-tertiary flex flex-row items-center w-full py-3 sticky top-0 z-50">
       <DensityMediumIcon
         className="md:invisible md:w-0 pl-1 cursor-pointer"
-        onClick={(e) => {
+        onClick={() => {
           setDropDownListActivity((prev) => !prev);
         }}
       />
@@ -76,17 +76,17 @@ function Navbar() {
           </Link>
         </li>
       </ul>
-      {loggedIn ? (
+      {session ? (
         <div className=" basis-2/3 md:basis-[40%] flex flex-row justify-center">
           <div
             className={`cursor-pointer w-[30px] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-full font-bold`}
           >
-            <Image
+            {/* <Image
               src={"/images/self.png"}
               height={50}
               width={50}
               className="rounded-full"
-            />
+            /> */}
           </div>
           <div
             className={`px-3 cursor-pointer ml-2 w-[35%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
@@ -105,8 +105,8 @@ function Navbar() {
             className={`cursor-pointer w-[35%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
           >
             <Link
-              href="/signup"
-              className={`px-2 h-full flex justify-center w-[50%] items-center`}
+              href="/register"
+              className={`h-full flex justify-center w-[50%] items-center`}
             >
               Signup
             </Link>

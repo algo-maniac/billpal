@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, models } from "mongoose";
 
 const groupSchema = new Schema(
   {
@@ -32,4 +32,4 @@ const groupSchema = new Schema(
   }
 );
 
-export const Group = mongoose.model("Group", groupSchema);
+export const Group = models.Group || mongoose.model("Group", groupSchema);

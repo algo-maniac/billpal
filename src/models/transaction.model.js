@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, models } from "mongoose";
 
 const finalTransactionListSchema = new Schema({
   sender: {
@@ -41,4 +41,5 @@ const transactionSchema = new Schema(
   }
 );
 
-export const Transaction = mongoose.model("Transaction", transactionSchema);
+export const Transaction =
+  models.Transaction || mongoose.model("Transaction", transactionSchema);
