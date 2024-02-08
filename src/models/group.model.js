@@ -1,10 +1,18 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, models } from "mongoose";
 
 const groupSchema = new Schema(
   {
-    groupName: {
+    name: {
       type: String,
       required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
     },
     transactionArray: [
       {
@@ -24,4 +32,4 @@ const groupSchema = new Schema(
   }
 );
 
-export const Group = mongoose.model("Group", groupSchema);
+export const Group = models.Group || mongoose.model("Group", groupSchema);

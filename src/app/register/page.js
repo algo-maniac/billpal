@@ -1,41 +1,65 @@
 "use client";
-import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 import Social from "@/components/Social";
-import { getSession, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { HiAtSymbol, HiFingerPrint, HiOutlineUser } from "react-icons/hi";
 
 function page() {
-  const [show, setShow] = useState(false);
-  const router = useRouter();
-
   const [userDetails, setUserDetails] = useState({
+    username: "",
     email: "",
     password: "",
   });
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    const { username, email, password } = userDetails;
+    if (!username || !email || !password) {
+      toast.error("All fields are necessary!");
+    }
     try {
-      const res = await signIn("credentials", {
-        email: userDetails.email,
-        password: userDetails.password,
-        redirect: false,
+      const resUserExists = await fetch("api/userExists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
       });
 
-      if (res.error) {
-        console.log(res.error);
-        toast.error("Invalid Credentials");
+      const { user } = await resUserExists.json();
+
+      if (user) {
+        toast.error("User already exists.");
         return;
       }
-      const session = await getSession();
-      if (session) {
-        router.replace("/groups");
+
+      const res = await fetch("api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+      });
+      if (res.ok) {
+        const form = e.target;
+        toast.success("Registered Successfully");
+        form.reset();
+        router.push("/login");
+      } else {
+        const er = await res.json();
+        console.log("User registration failed.", er);
       }
     } catch (error) {
-      console.log(error);
+      //     console.log("Error during registration: ", error);
     }
   };
 
@@ -43,19 +67,29 @@ function page() {
     <div className="w-full flex flex-col justify-around items-center">
       <Toaster position="top-right" reverseOrder={false} className="absolute" />
       <div className="flex flex-col justify-aroundw-[50%] m-10 p-5 shadow-md shadow-slate-700">
-        <div className="text-3xl text-center border-2 border-blue-400 bg-blue-400 rounded-xl w-[60%] mx-auto py-1">
-          Login
-        </div>
-        <Social />
-        <div className="flex flex-row justify-center items-center text-lg m-auto w-full">
-          <div className="w-1/2 border-[1px] border-blue-600 mx-2"></div>
-          OR
-          <div className="w-1/2 border-[1px] border-blue-600 mx-2"></div>
+        <div className="text-3xl text-center border-2 border-blue-400 bg-blue-400 rounded-xl w-[60%] mx-auto py-2">
+          Sign up
         </div>
         <form
           onSubmit={submitHandler}
           className="text-xl flex flex-col justify-around"
         >
+          <div className="flex flex-col my-2">
+            <div>Username</div>
+            <div className="flex border-2 border-blue-600 rounded-lg ">
+              <input
+                type="text"
+                onChange={(e) => {
+                  setUserDetails({ ...userDetails, username: e.target.value });
+                }}
+                value={userDetails.username}
+                className="m-1 outline-none w-full px-1"
+              />
+              <span className="icon flex items-center px-4 text-gray-500">
+                <HiOutlineUser size={20} />
+              </span>
+            </div>
+          </div>
           <div className="flex flex-col my-2">
             <div>Email</div>
             <div className="flex border-2 border-blue-600 rounded-lg ">
@@ -99,12 +133,9 @@ function page() {
           </button>
         </form>
         <p className="text-center text-gray-600">
-          Don't have an account yet?{" "}
-          <Link
-            href={"/register"}
-            className="text-blue-500 hover:text-blue-700"
-          >
-            Sign Up
+          Have an account?{" "}
+          <Link href={"/login"} className="text-blue-500 hover:text-blue-700">
+            Sign In
           </Link>
         </p>
       </div>
