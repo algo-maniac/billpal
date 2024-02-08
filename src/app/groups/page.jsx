@@ -2,139 +2,17 @@
 
 import GroupCard from "@/components/GroupCard";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function page() {
-  const [groupArray, setGroupArray] = useState(
-    [
-      {
-        id: 1,
-        name: "Tech Enthusiasts",
-        description:
-          "Discuss the latest trends and innovations in the tech world.",
-      },
-      {
-        id: 2,
-        name: "Fitness Fanatics",
-        description:
-          "Share workout routines, nutrition tips, and fitness challenges.",
-      },
-      {
-        id: 3,
-        name: "Book Club",
-        description: "Explore and discuss literature with fellow book lovers.",
-      },
-      {
-        id: 4,
-        name: "Cooking Crew",
-        description:
-          "Exchange recipes, cooking techniques, and foodie experiences.",
-      },
-      {
-        id: 5,
-        name: "Travel Explorers",
-        description:
-          "Share travel stories, tips, and recommendations from around the world.",
-      },
-      {
-        id: 6,
-        name: "Photography Passion",
-        description:
-          "Showcase your photography skills and learn from other enthusiasts.",
-      },
-      {
-        id: 7,
-        name: "Art Aficionados",
-        description:
-          "Discuss various forms of art, share creations, and provide feedback.",
-      },
-      {
-        id: 8,
-        name: "Gaming Guild",
-        description:
-          "Connect with fellow gamers, discuss favorite games, and organize multiplayer sessions.",
-      },
-      {
-        id: 9,
-        name: "Music Maestros",
-        description:
-          "Explore different music genres, share playlists, and discuss your favorite artists.",
-      },
-      {
-        id: 10,
-        name: "Film Buffs",
-        description:
-          "Discuss movies, TV shows, and cinematic experiences with fellow film enthusiasts.",
-      },
-      {
-        id: 11,
-        name: "Coding Collective",
-        description:
-          "Collaborate on coding projects, share coding challenges, and seek help from the community.",
-      },
-      {
-        id: 12,
-        name: "Language Learners",
-        description:
-          "Practice and learn new languages together with language exchange sessions.",
-      },
-      {
-        id: 13,
-        name: "DIY Crafters",
-        description:
-          "Share creative DIY projects, crafting tips, and handmade creations.",
-      },
-      {
-        id: 14,
-        name: "Green Thumb Society",
-        description:
-          "Discuss gardening tips, plant care, and share your beautiful garden photos.",
-      },
-      {
-        id: 15,
-        name: "Finance Wizards",
-        description:
-          "Discuss personal finance, investments, and financial planning strategies.",
-      },
-      {
-        id: 16,
-        name: "Pet Lovers Club",
-        description:
-          "Share stories and tips about pet care, training, and the joy of having furry companions.",
-      },
-      {
-        id: 17,
-        name: "Yoga & Meditation",
-        description:
-          "Connect with like-minded individuals interested in yoga and meditation practices.",
-      },
-      {
-        id: 18,
-        name: "Science Explorers",
-        description:
-          "Discuss scientific discoveries, advancements, and engage in scientific discussions.",
-      },
-      {
-        id: 19,
-        name: "Writing Workshop",
-        description:
-          "Share your writing projects, receive feedback, and participate in writing challenges.",
-      },
-      {
-        id: 20,
-        name: "Entrepreneurial Minds",
-        description:
-          "Connect with fellow entrepreneurs, share business insights, and discuss startup ideas.",
-      },
-    ]
-
-    // You can use this 'groups' array in your application as needed.
-  );
+  const { data: session } = useSession();
+  const [groupArray, setGroupArray] = useState([]);
 
   const [approvalModal, setApprovalModal] = useState(0);
 
-  const submitHandler = async () => {
+  const submitHandler = async (e) => {
     let size = groupArray.length;
     setGroupArray((prev) => [...prev, { ...groupDetails, id: size + 1 }]);
     setGroupDetails({
@@ -148,6 +26,7 @@ function page() {
       description: groupDetails.description,
       password: groupDetails.password,
     });
+    console.log(response.data);
   };
 
   const [groupDetails, setGroupDetails] = useState({
@@ -163,11 +42,30 @@ function page() {
   });
 
   const router = useRouter();
-  const verifyPassword = async () => {
-    // const response = await axios.post("/api/verify-password", credentials);
-    // const groupId = response.data.groupId;
-    // router.push(`/groups/${groupId}`);
+  const verifyPassword = async (e) => {
+    e.preventDefault();
+    const memberId = session?.user?.id;
+    const groupIdResponse = await axios.post("/api/get-groupid-by-name", {
+      groupName: credentials.name,
+    });
+    const groupId = groupIdResponse.data.groupId;
+    console.log(groupIdResponse.data);
+    const response = await axios.post("/api/verify-password", {
+      memberId,
+      password: credentials.password,
+      groupId,
+    });
+    if (response.data.status === 200) router.push(`/groups/${groupId}`);
   };
+
+  useEffect(() => {
+    (async () => {
+      const response = await axios.get("/api/get-all-groups");
+      const allGroups = response.data.groups;
+      console.log(response);
+      setGroupArray(allGroups);
+    })();
+  }, []);
   return (
     <div>
       {approvalModal ? (
@@ -272,8 +170,8 @@ function page() {
             <GroupCard
               name={group.name}
               description={group.description}
-              id={group.id}
-              key={group.id}
+              id={group._id}
+              key={group._id}
               setApprovalModal={setApprovalModal}
               setCredentials={setCredentials}
               credentials={credentials}

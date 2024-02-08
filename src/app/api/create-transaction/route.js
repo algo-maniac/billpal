@@ -1,4 +1,5 @@
 import { connectDB } from "@/lib/mongodb";
+import { Group } from "@/models/group.model";
 import { Transaction } from "@/models/transaction.model";
 
 import { NextResponse } from "next/server";
@@ -18,6 +19,15 @@ export async function POST(req) {
       memberArray,
       finalTransactionList,
     });
+
+    const existingGroup = await Group.findById(groupId);
+
+    if (!existingGroup) {
+      return NextResponse.json({ status: 404, message: "Group not found" });
+    }
+
+    existingGroup.transactionArray.push(newTransaction._id);
+    existingGroup.save();
 
     // Send a success response
     return NextResponse.json({

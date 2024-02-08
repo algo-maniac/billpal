@@ -14,19 +14,28 @@ export async function POST(req) {
       return NextResponse.json({ status: 404, message: "Group not found" });
     }
 
-    // Check if the provided password matches the group's password
-    if (existingGroup.password !== password) {
-      return NextResponse.json({ status: 401, message: "Incorrect password" });
+    if (existingGroup.memberArray.includes(memberId)) {
+      return NextResponse.json({
+        status: 200,
+        message: "Member already exists in group",
+      });
+    } else {
+      // Check if the provided password matches the group's password
+      if (existingGroup.password !== password) {
+        return NextResponse.json({
+          status: 401,
+          message: "Incorrect password",
+        });
+      }
+
+      existingGroup.memberArray.push(memberId);
+      await existingGroup.save();
+
+      return NextResponse.json({
+        status: 200,
+        message: "Member added successfully",
+      });
     }
-
-    // Add the memberId to the memberArray
-    existingGroup.memberArray.push(memberId);
-    await existingGroup.save();
-
-    return NextResponse.json({
-      status: 200,
-      message: "Member added successfully",
-    });
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json({ status: 500, message: "Internal Server Error" });
