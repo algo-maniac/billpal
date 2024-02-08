@@ -2,9 +2,17 @@ import mongoose, { Schema } from "mongoose";
 
 const groupSchema = new Schema(
   {
-    groupName: {
+    name: {
       type: String,
       required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
     },
     transactionArray: [
       {

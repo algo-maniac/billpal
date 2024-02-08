@@ -11,7 +11,7 @@ function Navbar() {
   const [loggedIn, setLoggedIn] = useState(0);
 
   return (
-    <nav className="shadow-md shadow-neutral-200 bg-blue-300 flex flex-row items-center w-full py-3 sticky top-0 z-50">
+    <nav className="bg-primary text-tertiary flex flex-row items-center w-full py-3 sticky top-0 z-50">
       <DensityMediumIcon
         className="md:invisible md:w-0 pl-1 cursor-pointer"
         onClick={(e) => {
@@ -19,8 +19,8 @@ function Navbar() {
         }}
       />
       {dropdownListActivity ? (
-        <ul className="border-2 border-blue-400 absolute top-16 z-30 bg-blue-300 md:invisible rounded-lg">
-          <li className="p-2 w-[150px] flex justify-center border-y-2 border-blue-400">
+        <ul className="border-2 border-primary absolute top-16 z-30 bg-primary md:invisible rounded-lg">
+          <li className="p-2 w-[150px] flex justify-center border-y-2 border-primary">
             <Link
               href="/"
               className="h-full w-full flex justify-center items-center"
@@ -28,7 +28,7 @@ function Navbar() {
               Home
             </Link>
           </li>
-          <li className="p-2 w-[150px] flex justify-center border-y-2 border-blue-400">
+          <li className="p-2 w-[150px] flex justify-center border-y-2 border-primary">
             <Link
               href="/"
               className="h-full w-full flex justify-center items-center"
@@ -36,9 +36,9 @@ function Navbar() {
               About
             </Link>
           </li>
-          <li className="p-2 w-[150px] flex justify-center border-y-2 border-blue-400">
+          <li className="p-2 w-[150px] flex justify-center border-y-2 border-primary">
             <Link
-              href="/"
+              href="/groups"
               className="h-full w-full flex justify-center items-center"
             >
               Groups
@@ -69,7 +69,7 @@ function Navbar() {
         </li>
         <li className="hover:underline underline-offset-4 px-2 mx-2 cursor-pointer">
           <Link
-            href="/"
+            href="/groups"
             className="h-full w-full flex justify-center items-center"
           >
             Groups
@@ -79,7 +79,7 @@ function Navbar() {
       {loggedIn ? (
         <div className=" basis-2/3 md:basis-[40%] flex flex-row justify-center">
           <div
-            className={`cursor-pointer w-[30px] flex flex-row justify-center items-center bg-blue-700 border-2 border-blue-700 rounded-full font-bold`}
+            className={`cursor-pointer w-[30px] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-full font-bold`}
           >
             <Image
               src={"/images/self.png"}
@@ -89,11 +89,11 @@ function Navbar() {
             />
           </div>
           <div
-            className={`cursor-pointer ml-2 w-[35%] flex flex-row justify-center items-center bg-blue-700 border-2 border-blue-700 rounded-xl font-bold`}
+            className={`px-3 cursor-pointer ml-2 w-[35%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
           >
             <Link
               href="/"
-              className={`h-full flex justify-center w-[50%] items-center`}
+              className={` h-full flex justify-center w-[50%] items-center`}
             >
               Logout
             </Link>
@@ -102,21 +102,21 @@ function Navbar() {
       ) : (
         <div className=" basis-2/3 md:basis-[40%] flex flex-row justify-center">
           <div
-            className={`cursor-pointer w-[35%] flex flex-row justify-center items-center bg-blue-700 border-2 border-blue-700 rounded-xl font-bold`}
+            className={`cursor-pointer w-[35%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
           >
             <Link
               href="/signup"
-              className={`h-full flex justify-center w-[50%] items-center`}
+              className={`px-2 h-full flex justify-center w-[50%] items-center`}
             >
               Signup
             </Link>
           </div>
           <div
-            className={`cursor-pointer ml-2 w-[35%] flex flex-row justify-center items-center bg-blue-700 border-2 border-blue-700 rounded-xl font-bold`}
+            className={`cursor-pointer ml-2 w-[35%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
           >
             <Link
               href="/login"
-              className={`h-full flex justify-center w-[50%] items-center`}
+              className={`px-2 h-full flex justify-center w-[50%] items-center`}
             >
               Login
             </Link>

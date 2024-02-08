@@ -8,7 +8,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 function Footer() {
   return (
-    <footer className="flex flex-col shadow-md shadow-neutral-900 bg-blue-300 bottom-0 right-0 left-0 z-30">
+    <footer className="text-tertiary flex flex-col bg-primary bottom-0 right-0 left-0 z-30">
       <div className="flex flex-col  justify-around items-center p-4 ">
         <div className="text-2xl font-bold  p-2">Follow Us</div>
         <ul className="flex flex-row  p-2">
@@ -50,7 +50,7 @@ function Footer() {
           <div>Dress</div>
         </div>
       </div>
-      <div className="text-center bg-blue-800 font-medium">
+      <div className="text-center bg-secondary font-medium">
         Copyright @shopperz.com
       </div>
     </footer>
