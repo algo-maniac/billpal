@@ -5,13 +5,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import DensityMediumIcon from "@mui/icons-material/DensityMedium";
 import Link from "next/link";
 import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
 
 function Navbar() {
   const [dropdownListActivity, setDropDownListActivity] = useState(0);
   // const session = await getServerSession(options);
-  const session = false;
+  const { data: session } = useSession();
   return (
-    <nav className="bg-primary text-tertiary flex flex-row items-center w-full py-3 sticky top-0 z-50">
+    <nav className="navbar-shade bg-primary text-tertiary flex flex-row items-center w-full py-3 sticky top-0 z-50">
       <DensityMediumIcon
         className="md:invisible md:w-0 pl-1 cursor-pointer"
         onClick={() => {
@@ -79,8 +80,9 @@ function Navbar() {
       {session ? (
         <div className=" basis-2/3 md:basis-[40%] flex flex-row justify-center">
           <div
-            className={`cursor-pointer w-[30px] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-full font-bold`}
+            className={`cursor-pointer sm:w-[30%] w-[40px] flex flex-row justify-center items-center rounded-full font-bold`}
           >
+            {session.user.name}
             {/* <Image
               src={"/images/self.png"}
               height={50}
@@ -89,38 +91,26 @@ function Navbar() {
             /> */}
           </div>
           <div
-            className={`px-3 cursor-pointer ml-2 w-[35%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
+            className={`coolBeans hover:opacity-100 opacity-85 px-3 cursor-pointer ml-2 w-[35%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
+            onClick={() => signOut()}
           >
-            <Link
-              href="/"
-              className={` h-full flex justify-center w-[50%] items-center`}
-            >
-              Logout
-            </Link>
+            Logout
           </div>
         </div>
       ) : (
-        <div className=" basis-2/3 md:basis-[40%] flex flex-row justify-center">
-          <div
-            className={`cursor-pointer w-[35%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
+        <div className="w-[60%] md:basis-[40%] flex flex-row justify-center">
+          <Link
+            href="/register"
+            className={`coolBeans hover:opacity-100 opacity-85 cursor-pointer px-5 h-[50px] sm:h-[70px] w-[25%] sm:w-[30%] flex flex-row justify-center items-center bg-secondary border-4 border-secondary rounded-xl font-bold`}
           >
-            <Link
-              href="/register"
-              className={`h-full flex justify-center w-[50%] items-center`}
-            >
-              Signup
-            </Link>
-          </div>
-          <div
-            className={`cursor-pointer ml-2 w-[35%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
+            Signup
+          </Link>
+          <Link
+            href="/login"
+            className={`coolBeans hover:opacity-100 opacity-85 ml-2 cursor-pointer px-5 h-[50px] sm:h-[70px] w-[25%] sm:w-[30%] flex flex-row justify-center items-center bg-secondary border-4 border-secondary rounded-xl font-bold`}
           >
-            <Link
-              href="/login"
-              className={`px-2 h-full flex justify-center w-[50%] items-center`}
-            >
-              Login
-            </Link>
-          </div>
+            Login
+          </Link>
         </div>
       )}
     </nav>

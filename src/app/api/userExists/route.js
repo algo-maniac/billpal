@@ -5,7 +5,8 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     connectDB();
-    const { email } = await req.json();
+    const { email } = req.json();
+    console.log(email);
     const user = await User.findOne({ email }).select("_id");
     console.log("user: ", user);
     return NextResponse.json({ user });

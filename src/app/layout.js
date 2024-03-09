@@ -1,11 +1,13 @@
-import { Roboto_Serif } from "next/font/google";
+import { Roboto_Serif, Andada_Pro } from "next/font/google";
 
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { AuthProvider } from "./Providers";
+import { Toaster } from "react-hot-toast";
 
 const roboto_serif = Roboto_Serif({ subsets: ["latin"] });
+const andada_pro = Andada_Pro({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Create Next App",
@@ -14,11 +16,18 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className=" bg-backup">
+    <html lang="en" className="">
       <body className={roboto_serif.className}>
-        <Navbar />
-        <AuthProvider>{children}</AuthProvider>
-        <Footer />
+        <AuthProvider>
+          <Navbar />
+          <Toaster
+            position="top-right"
+            reverseOrder={false}
+            className="absolute"
+          />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

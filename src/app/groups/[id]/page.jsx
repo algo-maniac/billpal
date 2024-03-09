@@ -2,35 +2,33 @@
 
 import MemberCard from "@/components/MemberCard";
 import TransactionCard from "@/components/TransactionCard";
-import { Delete } from "@mui/icons-material";
+import { Add, CurrencyRupee, Delete } from "@mui/icons-material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 // pages/group/[id].js
 
 const GroupPage = ({ params }) => {
-  // useEffect(() => {
-  //   const getAllMembers = async () => {
-  //     const response = await axios.post("/api/get-all-members", {groupId:params.id});
-  //     setMemberArray(response.data.membersList);
-  //   };
-  //   getAllMembers();
-  // }, []);
-
-  // useEffect(() => {
-  //   const getAllTransactions = async () => {
-  //     const response = await axios.post("/api/get-all-transactions", {groupId:params.id});
-  //     setTransactionArray(response.data.transactionsList);
-  //   };
-  //   getAllMembers();
-  // }, []);
-
+  const router = useRouter();
   const removeTransaction = async (transactionId) => {
-    const response = await axios.post("/api/remove-transaction", {
-      groupId: params.id,
-      transactionId,
-    });
-    setTransactionArray(response.data.transactionsList);
+    try {
+      const response = await axios.post("/api/remove-transaction", {
+        groupId: params.id,
+        transactionId: currentTransaction,
+      });
+      if (response.data.status === 200) {
+        toast.success("Transaction Deleted");
+        setFetchingRequired((prev) => !prev);
+        router.replace("/groups");
+      } else {
+        toast.error("Could not delete transaction");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    // setTransactionArray(response.data.transactionsList);
   };
 
   const removeMember = async (memberId) => {
@@ -47,6 +45,7 @@ const GroupPage = ({ params }) => {
 
   const [transactionDetails, setTransactionDetails] = useState({
     name: "",
+    description: "",
     members: [
       {
         id: 0,
@@ -56,127 +55,7 @@ const GroupPage = ({ params }) => {
     ],
   });
 
-  const [memberArray, setMemberArray] = useState([
-    {
-      id: 0,
-      name: "Jessica Anderson",
-      email: "jessica.anderson@example.com",
-      upiId: "jessica.anderson@upi",
-    },
-    {
-      id: 1,
-      name: "Samuel Patel",
-      email: "samuel.patel@example.com",
-      upiId: "samuel.patel@upi",
-    },
-    {
-      id: 2,
-      name: "Emily Nguyen",
-      email: "emily.nguyen@example.com",
-      upiId: "emily.nguyen@upi",
-    },
-    {
-      id: 3,
-      name: "Alex Thompson",
-      email: "alex.thompson@example.com",
-      upiId: "alex.thompson@upi",
-    },
-    {
-      id: 4,
-      name: "Maria Garcia",
-      email: "maria.garcia@example.com",
-      upiId: "maria.garcia@upi",
-    },
-  ]);
-
-  const [transactionArray, setTransactionArray] = useState([
-    {
-      name: "Transaction 1",
-      members: [
-        { id: 1, name: "John", amountPaid: 20, amountToBePaid: 30 },
-        { id: 2, name: "Alice", amountPaid: 15, amountToBePaid: 25 },
-      ],
-    },
-    {
-      name: "Transaction 2",
-      members: [
-        { id: 3, name: "Bob", amountPaid: 25, amountToBePaid: 20 },
-        { id: 4, name: "Emily", amountPaid: 30, amountToBePaid: 18 },
-      ],
-    },
-    {
-      name: "Transaction 3",
-      members: [
-        { id: 5, name: "David", amountPaid: 18, amountToBePaid: 22 },
-        { id: 6, name: "Sophie", amountPaid: 22, amountToBePaid: 15 },
-      ],
-    },
-    {
-      name: "Transaction 4",
-      members: [
-        { id: 7, name: "Michael", amountPaid: 25, amountToBePaid: 30 },
-        { id: 8, name: "Olivia", amountPaid: 20, amountToBePaid: 18 },
-      ],
-    },
-    {
-      name: "Transaction 5",
-      members: [
-        { id: 9, name: "Daniel", amountPaid: 15, amountToBePaid: 25 },
-        { id: 10, name: "Emma", amountPaid: 28, amountToBePaid: 23 },
-      ],
-    },
-    {
-      name: "Transaction 6",
-      members: [
-        { id: 11, name: "Sophia", amountPaid: 22, amountToBePaid: 15 },
-        { id: 12, name: "James", amountPaid: 18, amountToBePaid: 25 },
-      ],
-    },
-    {
-      name: "Transaction 7",
-      members: [
-        { id: 13, name: "William", amountPaid: 35, amountToBePaid: 20 },
-        { id: 14, name: "Ella", amountPaid: 20, amountToBePaid: 18 },
-      ],
-    },
-    {
-      name: "Transaction 8",
-      members: [
-        { id: 15, name: "Alexander", amountPaid: 25, amountToBePaid: 30 },
-        { id: 16, name: "Mia", amountPaid: 15, amountToBePaid: 22 },
-      ],
-    },
-    {
-      name: "Transaction 9",
-      members: [
-        { id: 17, name: "Abigail", amountPaid: 22, amountToBePaid: 15 },
-        { id: 18, name: "Benjamin", amountPaid: 28, amountToBePaid: 23 },
-      ],
-    },
-    {
-      name: "Transaction 10",
-      members: [
-        { id: 19, name: "Charlotte", amountPaid: 18, amountToBePaid: 25 },
-        { id: 20, name: "Aiden", amountPaid: 25, amountToBePaid: 30 },
-      ],
-    },
-  ]);
-
   const [finalTransactionList, setFinalTransactionList] = useState([]);
-  const addMember = (e) => {
-    e.preventDefault();
-    const newId = transactionDetails.members.length;
-    if (newId > 5) return;
-    const newMember = {
-      id: newId,
-      name: "",
-      amountPaid: 0,
-    };
-    setTransactionDetails((prevState) => ({
-      ...prevState,
-      members: [...prevState.members, newMember],
-    }));
-  };
 
   const handleMemberNameChange = (index, newName) => {
     const updatedMembers = [...transactionDetails.members];
@@ -214,229 +93,323 @@ const GroupPage = ({ params }) => {
     console.log(updatedMembers);
   };
 
-  const memberSubmitHandler = () => {
-    console.log(memberDetails);
-  };
-
   const transactionSubmitHandler = async (e) => {
-    e.preventDefault();
-    console.log(transactionDetails);
-    let len = transactionDetails.members.length;
-    let totalAmount = Number(0);
-    for (let i = 0; i < len; i++) {
-      totalAmount += Number(transactionDetails.members[i].amountPaid);
-      // console.log(Number(transactionDetails.members[i].amountPaid));
-      console.log(totalAmount);
+    try {
+      const response = await axios.post("/api/create-transaction", {
+        transactionDetails, // sender, receiver, amount
+        groupId: params.id,
+        name: transactionDetails.name,
+        description: transactionDetails.description,
+        members: transactionDetails.members,
+      });
+
+      console.log(response.data);
+      router.replace("/groups");
+    } catch (error) {
+      console.log(error);
     }
-    let average = totalAmount / len;
-    console.log(totalAmount);
-    console.log(average);
-    console.log(typeof average);
-
-    let senderList = [],
-      receiverList = [];
-    for (let i = 0; i < len; i++) {
-      let paid = Number(transactionDetails.members[i].amountPaid);
-      console.log(typeof paid);
-      if (paid < average) {
-        senderList.push({
-          ...transactionDetails.members[i],
-          amountToBePaid: Math.abs(paid - average),
-        });
-      }
-      if (paid > average) {
-        receiverList.push({
-          ...transactionDetails.members[i],
-          amountToBeReceived: Math.abs(paid - average),
-        });
-      }
-    }
-    console.log(senderList);
-    console.log(receiverList);
-
-    console.log(20);
-    let finalList = [];
-
-    let i = 0,
-      j = 0;
-    let len1 = senderList.length,
-      len2 = receiverList.length;
-    while (i < len1 && j < len2) {
-      if (senderList[i].amountToBePaid > receiverList[j].amountToBeReceived) {
-        finalList.push({
-          sender: senderList[i].name,
-          receiver: receiverList[j].name,
-          amount: receiverList[j].amountToBeReceived.toFixed(2),
-        });
-        senderList[i].amountToBePaid =
-          senderList[i].amountToBePaid - receiverList[j].amountToBeReceived;
-
-        receiverList[j].amountToBeReceived = 0;
-        j++;
-      } else if (
-        senderList[i].amountToBePaid < receiverList[j].amountToBeReceived
-      ) {
-        finalList.push({
-          sender: senderList[i].name,
-          receiver: receiverList[j].name,
-          amount: senderList[i].amountToBePaid.toFixed(2),
-        });
-        senderList[i].amountToBePaid = 0;
-        receiverList[j].amountToBeReceived =
-          receiverList[j].amountToBeReceived - senderList[i].amountToBePaid;
-        i++;
-      } else {
-        finalList.push({
-          sender: senderList[i].name,
-          receiver: receiverList[j].name,
-          amount: senderList[i].amountToBePaid.toFixed(2),
-        });
-
-        senderList[i].amountToBePaid = 0;
-        receiverList[i].amountToBeReceived = 0;
-        i++;
-        j++;
-      }
-    }
-    console.log(senderList);
-    console.log(receiverList);
-    console.log(finalList);
-    setFinalTransactionList(finalList);
-    // const response = await axios.post("/api/create-transaction", {
-    //   ...finalTransactionList, // sender, receiver, amount
-    //   groupId: params.id,
-    //   name: transactionDetails.name,
-    //   members: transactionDetails.members,
-    // });
   };
-  return (
-    <div className="flex flex-col items-center mt-2">
-      <h1 className="text-tertiary text-5xl">Group Name</h1>
-      <div className="text-tertiary flex flex-col justify-center w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] rounded-lg m-10 p-5 shadow-md shadow-slate-700 bg-primary">
-        <div className="text-2xl text-center border-2 border-secondary bg-secondary rounded-xl w-[60%] mx-auto py-2">
-          Add a member
-        </div>
-        <form className="text-xl flex flex-col justify-around">
-          <div className="flex flex-col my-2">
-            <div>Email</div>
-            <input
-              type="email"
-              onChange={(e) => {
-                setMemberDetails({ ...memberDetails, email: e.target.value });
-              }}
-              value={memberDetails.email}
-              className="p-1 px-2 rounded-lg outline-none border-2 border-backup bg-backup w-full"
-            />
-          </div>
 
-          <button
-            type="submit"
-            className="p-2 border-2 border-secondary bg-secondary rounded-xl w-[40%] mx-auto my-5"
-            onClick={memberSubmitHandler}
+  const addMember = (e) => {
+    e.preventDefault();
+    const newId = transactionDetails.members.length;
+    if (newId > 5) return;
+    const newMember = {
+      id: newId,
+      name: "",
+      amountPaid: 0,
+    };
+    setTransactionDetails((prevState) => ({
+      ...prevState,
+      members: [...prevState.members, newMember],
+    }));
+  };
+
+  const getAllMembers = async () => {
+    try {
+      const response = await axios.post("/api/get-all-members", {
+        groupId: params.id,
+      });
+      setMembers(response.data.memberList);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getAllTransactions = async () => {
+    try {
+      const response = await axios.post("/api/get-all-transactions", {
+        groupId: params.id,
+      });
+      setTransactions(response.data.transactionList);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoader(0);
+    }
+  };
+
+  const deleteGroup = async () => {
+    try {
+      const response = await axios.post("/api/remove-group", {
+        groupId: params.id,
+      });
+      if (response.data.status === 200) {
+        toast.success(response.data.message);
+        setFetchingRequired((prev) => !prev);
+        router.push("/groups");
+        `/groups`;
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [fetchingRequired, setFetchingRequired] = useState(0);
+  useEffect(() => {
+    getAllMembers();
+    getAllTransactions();
+  }, []);
+  const [members, setMembers] = useState([]);
+
+  const [transactions, setTransactions] = useState([]);
+
+  const [loader, setLoader] = useState(1);
+
+  const [transactionFormModal, setTransactionFormModal] = useState(0);
+
+  const [eachTransactionModal, setEachTransactionModal] = useState(0);
+
+  const openTransaction = async (id) => {
+    try {
+      setEachTransactionModal(1);
+      const response = await axios.post("/api/get-a-transaction", { id });
+      console.log(response.data);
+      setFinalTransactionList(response.data.finalTransactionArray);
+      setCurrentTransaction(id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [currentTransaction, setCurrentTransaction] = useState("");
+  return (
+    <>
+      <div>
+        {transactionFormModal ? (
+          <div
+            id="transaction"
+            className="modal-animation overflow-y-scroll h-[500px] fixed left-[50%] mx-auto z-20 text-tertiary flex flex-col justify-start w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] rounded-lg m-12 p-5 shadow-md shadow-slate-700 bg-primary"
           >
-            Submit
-          </button>
-        </form>
-      </div>
-      <h1 className="text-tertiary text-5xl">Members</h1>
-      <div className="flex justify-around items-center w-full flex-wrap">
-        {memberArray.map((member) => (
-          <MemberCard
-            key={member.id}
-            id={member.id}
-            name={member.name}
-            email={member.email}
-            upiId={member.upiId}
-            removeMember={removeMember}
-          />
-        ))}
-      </div>
-      <div className="text-tertiary flex flex-col justify-center w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] rounded-lg m-10 p-5 shadow-md shadow-slate-700 bg-primary">
-        <div className="text-2xl text-center border-2 border-secondary bg-secondary rounded-xl w-[60%] mx-auto py-2">
-          Add a transaction
-        </div>
-        <form className="text-xl flex flex-col justify-around">
-          <div className="flex flex-col my-2">
-            <div>Transaction Name</div>
-            <input
-              type="text"
-              onChange={(e) => {
-                setTransactionDetails({
-                  ...transactionDetails,
-                  name: e.target.value,
-                });
-              }}
-              value={memberDetails.name}
-              className="p-1 px-2 rounded-lg outline-none border-2 border-backup bg-backup w-full"
-            />
-          </div>
-          {transactionDetails.members.map((member, index) => (
-            <div className="flex flex-col my-2" key={member.id}>
-              <div className="flex items-center justify-start w-full">
-                <div className="flex flex-col w-full">
-                  <div>Member {member.id + 1}</div>
-                  <div className="flex items-center justify-center w-full">
-                    <input
-                      type="text"
-                      value={member.name}
-                      onChange={(e) =>
-                        handleMemberNameChange(index, e.target.value)
-                      }
-                      className="p-1 px-2 rounded-lg outline-none border-2 border-backup bg-backup w-full"
-                    />
-                  </div>
-                  <div>Amount Paid By Member {member.id + 1}</div>
-                  <div className="flex items-center justify-center w-full">
-                    <input
-                      type="number"
-                      value={member.amountPaid}
-                      onChange={(e) =>
-                        handleMemberAmountChange(index, e.target.value)
-                      }
-                      className="p-1 px-2 rounded-lg outline-none border-2 border-backup bg-backup w-full"
-                    />
+            <div
+              className={` text-md text-center border-2 border-secondary bg-secondary rounded-xl w-[70%] mx-auto p-2`}
+            >
+              CREATE A TRANSACTION
+            </div>
+
+            <form className="text-md flex flex-col justify-around">
+              <div className="flex flex-col mt-2">
+                <div>Transaction Name</div>
+                <input
+                  type="text"
+                  onChange={(e) => {
+                    setTransactionDetails({
+                      ...transactionDetails,
+                      name: e.target.value,
+                    });
+                  }}
+                  value={transactionDetails.name}
+                  className="my-2 p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <div>Description (MAX 20 WORDS)</div>
+                <input
+                  type="text"
+                  onChange={(e) => {
+                    setTransactionDetails({
+                      ...transactionDetails,
+                      description: e.target.value,
+                    });
+                  }}
+                  value={transactionDetails.description}
+                  className="my-2 p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
+                />
+              </div>
+
+              {transactionDetails.members.map((member, index) => (
+                <div className="flex flex-col my-2" key={member.id}>
+                  <div className="flex items-center justify-start w-full">
+                    <div className="flex flex-col w-full">
+                      <div>Member {member.id + 1}</div>
+                      <div className="flex items-center justify-center w-full">
+                        <input
+                          type="text"
+                          value={member.name}
+                          onChange={(e) =>
+                            handleMemberNameChange(index, e.target.value)
+                          }
+                          className="p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
+                        />
+                      </div>
+                      <div>Amount Paid By Member {member.id + 1}</div>
+                      <div className="flex items-center justify-center w-full">
+                        <input
+                          type="number"
+                          value={member.amountPaid}
+                          onChange={(e) =>
+                            handleMemberAmountChange(index, e.target.value)
+                          }
+                          className="p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
+                        />
+                      </div>
+                    </div>
+                    <div className=" flex justify-center">
+                      <Delete
+                        className="text-red-600 text-md cursor-pointer"
+                        onClick={() => handleDeleteMember(index)}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className=" flex justify-center">
-                  <Delete
-                    className="text-secondary text-3xl cursor-pointer"
-                    onClick={() => handleDeleteMember(index)}
-                  />
+              ))}
+
+              <button
+                type="submit"
+                className="coolBeans flex justify-center p-3 border-secondary bg-secondary rounded-xl w-[40%] mx-auto mt-2"
+                onClick={addMember}
+              >
+                Add Member
+              </button>
+              <button
+                type="submit"
+                className="coolBeans flex justify-center p-3 border-2 border-secondary bg-secondary rounded-xl w-[40%] mx-auto mt-3"
+                onClick={transactionSubmitHandler}
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        ) : null}
+
+        {eachTransactionModal ? (
+          <div className="modal-animation fixed left-[50%] mx-auto z-20 text-tertiary flex flex-col justify-start w-[85%] sm:w-[60%] md:w-[50%] lg:w-[50%] xl:w-[50%] rounded-lg m-12 p-5 shadow-md shadow-slate-700 bg-primary">
+            <h3
+              className="text-lg leading-6 font-medium text-tertiary"
+              id="modal-headline"
+            >
+              <strong>Transactions to be done</strong>
+            </h3>
+            <div className="mt-2 ">
+              {finalTransactionList.map((transaction, index) => (
+                <div key={index} className="grid grid-cols-3 gap-4">
+                  <div>
+                    <p className="font-semibold">Sender:</p>
+                    <p>{transaction.sender}</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Receiver:</p>
+                    <p>{transaction.receiver}</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Amount:</p>
+                    <p>
+                      <CurrencyRupee />
+                      {transaction.amount}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="submit"
+                className="coolBeans flex justify-center p-3 border-2 border-secondary bg-secondary rounded-xl w-[40%] mx-auto mt-3"
+                onClick={removeTransaction}
+              >
+                Delete Transaction
+              </button>
+            </div>
+          </div>
+        ) : null}
+
+        <div
+          className={`flex flex-col mb-10 ${transactionFormModal || eachTransactionModal ? "blur-sm" : ""}`}
+          onClick={() => {
+            if (transactionFormModal === 1) {
+              setTransactionFormModal(0);
+            }
+
+            if (eachTransactionModal === 1) {
+              setEachTransactionModal(0);
+            }
+          }}
+        >
+          {loader ? (
+            <div className="mt-4 loader mx-auto"></div>
+          ) : (
+            <div className="flex flex-col p-6">
+              <button
+                onClick={deleteGroup}
+                className="relative sm:left-[70%] left-[40%] coolBeans hover:opacity-100 opacity-85 m-2 flex items-center justify-center h-[50px] w-[60%] sm:w-[20%] bg-secondary shadow-md shadow-tertiary"
+              >
+                <Delete className="text-3xl mr-2" />
+                Delete Group
+              </button>
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold mb-2">Members</h2>
+                <div className="p-4 rounded-lg form-shade shadow-sm shadow-black">
+                  <ul>
+                    {members.map((member, index) => (
+                      <li key={index} className="text-base text-tertiary mb-2">
+                        <strong>{member.username}</strong> - &nbsp;{" "}
+                        {member.upiId}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </div>
-          ))}
 
-          <button
-            type="submit"
-            className="p-2 border-2 border-secondary bg-secondary rounded-xl w-[40%] mx-auto my-5"
-            onClick={addMember}
-          >
-            Add Member
-          </button>
-          <button
-            type="submit"
-            className="p-2 border-2 border-secondary bg-secondary rounded-xl w-[40%] mx-auto my-5"
-            onClick={transactionSubmitHandler}
-          >
-            Submit
-          </button>
-        </form>
+              <button
+                onClick={() => {
+                  setTransactionFormModal(1);
+                }}
+                className="mb-10 coolBeans hover:opacity-100 opacity-85 m-2 flex items-center justify-center h-[100px] w-[80%] sm:w-[20%] bg-secondary shadow-md shadow-tertiary"
+              >
+                <Add className="text-3xl mr-2" />
+                Add Transaction
+              </button>
+
+              <div>
+                <h2 className="text-2xl font-bold mb-2">Transactions</h2>
+                {transactions.length === 0 ? (
+                  <div>No Transactions</div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {transactions.map((transaction, index) => (
+                      <div
+                        key={index}
+                        className="coolBeans form-shade text-tertiary cursor-pointer rounded-2xl shadow-lg shadow-secondary p-6"
+                        onClick={() => {
+                          openTransaction(transaction._id);
+                        }}
+                      >
+                        <h2 className="text-xl font-bold mb-2">
+                          {transaction.transactionName}
+                        </h2>
+                        <p className="">{transaction.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-      <h1 className="text-tertiary text-5xl">Transactions</h1>
-      <div className="flex justify-around items-center w-full flex-wrap">
-        {transactionArray.map((transaction, index) => (
-          <TransactionCard
-            key={index}
-            id={transaction.id}
-            name={transaction.name}
-            members={transaction.members}
-            finalTransactionList={finalTransactionList}
-            removeTransaction={removeTransaction}
-          />
-        ))}
-      </div>
-    </div>
+    </>
   );
 };
 

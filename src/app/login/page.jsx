@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Social from "@/components/Social";
-import { getSession, signIn } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
@@ -16,9 +16,17 @@ function page() {
     password: "",
   });
 
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session !== null) {
+      router.replace("/");
+    }
+  }, []);
+
   const submitHandler = async (e) => {
-    e.preventDefault();
     try {
+      e.preventDefault();
       const res = await signIn("credentials", {
         email: userDetails.email,
         password: userDetails.password,
@@ -32,6 +40,7 @@ function page() {
       }
       const session = await getSession();
       if (session) {
+        toast.success("Logged in successfully!!!");
         router.replace("/groups");
       }
     } catch (error) {
@@ -41,8 +50,6 @@ function page() {
 
   return (
     <div className="text-tertiary w-full flex flex-col justify-around items-center">
-      <Toaster position="top-right" reverseOrder={false} className="absolute" />
-
       <div className="bg-primary flex flex-col justify-around w-[85%] sm:w-[60%] md:w-[50%] lg:w-[30%] m-10 p-5 shadow-md shadow-slate-700">
         <div className="text-3xl text-center border-2 border-secondary bg-secondary rounded-xl w-[60%] mx-auto py-1">
           Login
@@ -59,7 +66,7 @@ function page() {
         >
           <div className="flex flex-col my-2">
             <div>Email</div>
-            <div className="flex border-2 border-backup rounded-lg ">
+            <div className="flex border-2 border-tertiary rounded-lg ">
               <input
                 type="text"
                 onChange={(e) => {
@@ -75,7 +82,7 @@ function page() {
           </div>
           <div className="flex flex-col my-2">
             <div>Password</div>
-            <div className="flex border-2 border-backup rounded-lg ">
+            <div className="flex border-2 border-tertiary rounded-lg ">
               <input
                 type={`${show ? "text" : "password"}`}
                 onChange={(e) => {
@@ -94,14 +101,14 @@ function page() {
           </div>
           <button
             type="submit"
-            className="p-2 border-2 border-secondary bg-secondary rounded-xl w-[40%] mx-auto my-5 transition duration-500 hover:bg-gray-200 hover:border-gray-200 hover:text-primary"
+            className="coolBeans flex justify-center items-center p-2 border-2 rounded-xl w-[40%] mx-auto my-5 transition duration-500"
           >
             Submit
           </button>
         </form>
-        <p className="text-center text-gray-600">
+        <p className="text-center text-black">
           Don't have an account yet?{" "}
-          <Link href={"/register"} className="text-secondary">
+          <Link href={"/register"} className="text-backup">
             Sign Up
           </Link>
         </p>

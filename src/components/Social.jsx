@@ -8,6 +8,8 @@ const Social = () => {
     const res = signIn(provider, { callbackUrl: "/", error: "/login" });
     if (!res) {
       toast.error("user not found");
+    } else {
+      toast.success("Logged in successfully");
     }
   };
 
@@ -15,7 +17,7 @@ const Social = () => {
     <div className="flex items-center w-full gap-x-2 my-3">
       <button
         onClick={() => handler("google")}
-        className="w-full flex items-center justify-center bg-backup border-2 border-backup py-2 px-4 rounded-lg transition duration-300 hover:bg-gray-200"
+        className="w-full flex items-center justify-center coolBeans"
       >
         <span className="mx-2">Sign In with Google</span>
         <FcGoogle className="h-5 w-5" />

@@ -2,13 +2,13 @@ import mongoose, { Schema, models } from "mongoose";
 
 const finalTransactionListSchema = new Schema({
   sender: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
 
   receiver: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
 
   amount: {
@@ -25,6 +25,10 @@ const transactionSchema = new Schema(
       required: true,
     },
     transactionName: {
+      type: String,
+      required: true,
+    },
+    description: {
       type: String,
       required: true,
     },

@@ -22,7 +22,7 @@ function GroupCard({
       onClick={async () => {
         setApprovalModal((prev) => !prev);
         setCredentials({ ...credentials, name });
-        const response = axios.post();
+        // const response = axios.post("/api/verify-password", {});
       }}
       className="cursor-pointer relative bg-primary text-tertiary rounded-xl shadow-md shadow-backup border-black h-[300px] lg:h-[400px] w-[45%] sm:w-[27%] md:w-[20%] lg:w-[15%] m-[2.5%]"
     >

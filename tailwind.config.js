@@ -13,10 +13,15 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        primary: "#171717", // darkest
-        secondary: "#DA0037", // second darkest
-        tertiary: "#EDEDED", // lighest
-        backup: "#444444", // third darkest
+        primary: "#5DA8FF", // 60%
+        secondary: "#0078E3", // 30%
+        backup: "#0056C5", // 10%
+        tertiary: "black", // text
+      },
+      fontFamily: {
+        sanSerif: ["San serif", "sans-serif"],
+        anta: ["Anta", "anta"],
+        // Add more custom font families as needed
       },
     },
   },

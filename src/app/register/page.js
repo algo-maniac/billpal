@@ -1,5 +1,6 @@
 "use client";
 import Social from "@/components/Social";
+import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -10,20 +11,29 @@ function page() {
   const [userDetails, setUserDetails] = useState({
     username: "",
     email: "",
+    upiId: "",
     password: "",
   });
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
 
+  const { data: session } = useSession();
+  useEffect(() => {
+    if (session !== null) {
+      router.replace("/");
+    }
+  }, []);
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    const { username, email, password } = userDetails;
-    if (!username || !email || !password) {
+    console.log(userDetails);
+    const { username, email, password, upiId } = userDetails;
+    if (!username || !email || !password || !upiId) {
       toast.error("All fields are necessary!");
     }
     try {
-      const resUserExists = await fetch("api/userExists", {
+      const resUserExists = await fetch("/api/userExists", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,12 +43,14 @@ function page() {
 
       const { user } = await resUserExists.json();
 
+      console.log(user);
+
       if (user) {
         toast.error("User already exists.");
         return;
       }
 
-      const res = await fetch("api/register", {
+      const res = await fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,6 +59,7 @@ function page() {
           username,
           email,
           password,
+          upiId,
         }),
       });
       if (res.ok) {
@@ -76,7 +89,7 @@ function page() {
         >
           <div className="flex flex-col my-2">
             <div>Username</div>
-            <div className="flex border-2 border-backup rounded-lg ">
+            <div className="flex border-2 border-tertiary rounded-lg ">
               <input
                 type="text"
                 onChange={(e) => {
@@ -92,7 +105,7 @@ function page() {
           </div>
           <div className="flex flex-col my-2">
             <div>Email</div>
-            <div className="flex border-2 border-backup rounded-lg ">
+            <div className="flex border-2 border-tertiary rounded-lg ">
               <input
                 type="text"
                 onChange={(e) => {
@@ -107,8 +120,24 @@ function page() {
             </div>
           </div>
           <div className="flex flex-col my-2">
+            <div>UPI ID</div>
+            <div className="flex border-2 border-tertiary rounded-lg ">
+              <input
+                type="text"
+                onChange={(e) => {
+                  setUserDetails({ ...userDetails, upiId: e.target.value });
+                }}
+                value={userDetails.upiId}
+                className="m-1 outline-none w-full px-1 bg-primary"
+              />
+              <span className="icon flex items-center px-4 text-gray-500">
+                <HiAtSymbol size={20} />
+              </span>
+            </div>
+          </div>
+          <div className="flex flex-col my-2">
             <div>Password</div>
-            <div className="flex border-2 border-backup rounded-lg ">
+            <div className="flex border-2 border-tertiary rounded-lg ">
               <input
                 type={`${show ? "text" : "password"}`}
                 onChange={(e) => {
@@ -127,14 +156,14 @@ function page() {
           </div>
           <button
             type="submit"
-            className="p-2 border-2 border-secondary bg-secondary rounded-xl w-[40%] mx-auto my-5 transition duration-500 hover:bg-gray-200 hover:border-gray-200 hover:text-primary"
+            className="coolBeans flex justify-center items-center p-2 border-2 rounded-xl w-[40%] mx-auto my-5 transition duration-500"
           >
             Submit
           </button>
         </form>
-        <p className="text-center text-gray-600">
+        <p className="text-center text-tertiary">
           Have an account?{" "}
-          <Link href={"/login"} className="text-secondary">
+          <Link href={"/login"} className="text-backup">
             Sign In
           </Link>
         </p>
