@@ -2,16 +2,78 @@
 
 import MemberCard from "@/components/MemberCard";
 import TransactionCard from "@/components/TransactionCard";
-import { Add, CurrencyRupee, Delete } from "@mui/icons-material";
+import {
+  Add,
+  AdminPanelSettings,
+  CurrencyRupee,
+  Delete,
+  ExitToApp,
+  Groups,
+  MarkAsUnread,
+  Pin,
+  PinDrop,
+  PinRounded,
+  QrCode2,
+} from "@mui/icons-material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { FcLeave } from "react-icons/fc";
+
 // pages/group/[id].js
 
 const GroupPage = ({ params }) => {
+  const { data: session } = useSession();
   const router = useRouter();
+  const [groupName, setGroupName] = useState("");
+  const [src, setSrc] = useState("");
+
+  // const qrGenerate = async (name, amt) => {
+  //   try {
+  //     console.log(name);
+  //     const response = await axios.post("/api/get-user-by-username", {
+  //       uname: name,
+  //     });
+  //     if (response.data.status === 200) {
+  //       const upi = await upiqr({
+  //         payeeVPA: response.data.user.upiId,
+  //         payeeName: name,
+  //         amount: amt,
+  //       });
+  //       setSrc(upi.qr);
+  //       console.log(upi.intent);
+  //     } else if (response.data.status === 404) {
+  //       toast.error("User not foud");
+  //     } else if (response.data.status === 500) {
+  //       toast.error("Server error");
+  //     } else {
+  //       toast.error("Could not generate QR");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const getGroupName = async () => {
+    try {
+      const response = await axios.post("/api/get-groupname-by-id", {
+        groupId: params.id,
+      });
+      if (response.data.status === 200) {
+        console.log(response.data);
+        setGroupName(response.data.gName);
+      } else {
+        toast.error("Could not find group");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getGroupName();
+  }, []);
   const removeTransaction = async (transactionId) => {
     try {
       const response = await axios.post("/api/remove-transaction", {
@@ -31,12 +93,13 @@ const GroupPage = ({ params }) => {
     // setTransactionArray(response.data.transactionsList);
   };
 
-  const removeMember = async (memberId) => {
+  const removeMember = async () => {
     const response = await axios.post("/api/remove-member", {
       groupId: params.id,
-      memberId,
+      memberId: session.user.id,
     });
-    setMemberArray(response.data.membersList);
+    // setMemberArray(response.data.membersList);
+    router.replace("/groups");
   };
 
   const [memberDetails, setMemberDetails] = useState({
@@ -154,6 +217,7 @@ const GroupPage = ({ params }) => {
     try {
       const response = await axios.post("/api/remove-group", {
         groupId: params.id,
+        memberId: session.user.id,
       });
       if (response.data.status === 200) {
         toast.success(response.data.message);
@@ -247,14 +311,19 @@ const GroupPage = ({ params }) => {
                     <div className="flex flex-col w-full">
                       <div>Member {member.id + 1}</div>
                       <div className="flex items-center justify-center w-full">
-                        <input
-                          type="text"
+                        <select
                           value={member.name}
                           onChange={(e) =>
                             handleMemberNameChange(index, e.target.value)
                           }
                           className="p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
-                        />
+                        >
+                          {members.map((mem, idx) => (
+                            <option key={idx} value={mem.username}>
+                              {mem.username}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                       <div>Amount Paid By Member {member.id + 1}</div>
                       <div className="flex items-center justify-center w-full">
@@ -306,14 +375,16 @@ const GroupPage = ({ params }) => {
             </h3>
             <div className="mt-2 ">
               {finalTransactionList.map((transaction, index) => (
-                <div key={index} className="grid grid-cols-3 gap-4">
+                <div key={index} className="grid grid-cols-4 gap-4 mb-4">
                   <div>
                     <p className="font-semibold">Sender:</p>
                     <p>{transaction.sender}</p>
                   </div>
                   <div>
                     <p className="font-semibold">Receiver:</p>
-                    <p>{transaction.receiver}</p>
+                    <div className="flex">
+                      <p className="mr-2">{transaction.receiver}</p>
+                    </div>
                   </div>
                   <div>
                     <p className="font-semibold">Amount:</p>
@@ -321,6 +392,12 @@ const GroupPage = ({ params }) => {
                       <CurrencyRupee />
                       {transaction.amount}
                     </p>
+                  </div>
+                  <div>
+                    <img
+                      src={transaction.src}
+                      className="h-[60px] w-[60px] rounded-lg border-2 border-tertiary shadow-md shadow-tertiary hover:h-[100px] hover:w-[100px]"
+                    />
                   </div>
                 </div>
               ))}
@@ -351,23 +428,52 @@ const GroupPage = ({ params }) => {
             <div className="mt-4 loader mx-auto"></div>
           ) : (
             <div className="flex flex-col p-6">
-              <button
-                onClick={deleteGroup}
-                className="relative sm:left-[70%] left-[40%] coolBeans hover:opacity-100 opacity-85 m-2 flex items-center justify-center h-[50px] w-[60%] sm:w-[20%] bg-secondary shadow-md shadow-tertiary"
-              >
-                <Delete className="text-3xl mr-2" />
-                Delete Group
-              </button>
+              <div className="flex justify-between">
+                <div className="font-bold text-2xl rounded-md  m-2 flex items-center justify-center h-[50px] w-[50%] sm:w-[30%] bg-secondary shadow-md shadow-tertiary">
+                  <Groups className="text-4xl mr-2" />
+                  {groupName}
+                </div>
+                <div className="flex w-[60%] sm:w-[40%]">
+                  <button
+                    onClick={removeMember}
+                    className=" coolBeans hover:opacity-100 opacity-85 m-2 flex items-center justify-center h-[50px] w-[60%] sm:w-[80%] bg-secondary shadow-md shadow-tertiary"
+                  >
+                    <ExitToApp className="text-3xl mr-2" />
+                    Exit Group
+                  </button>
+                  <button
+                    onClick={deleteGroup}
+                    className=" coolBeans hover:opacity-100 opacity-85 m-2 flex items-center justify-center h-[50px] w-[60%] sm:w-[80%] bg-secondary shadow-md shadow-tertiary"
+                  >
+                    <Delete className="text-3xl mr-2" />
+                    Delete Group
+                  </button>
+                </div>
+              </div>
               <div className="mb-8">
                 <h2 className="text-2xl font-bold mb-2">Members</h2>
                 <div className="p-4 rounded-lg form-shade shadow-sm shadow-black">
                   <ul>
-                    {members.map((member, index) => (
-                      <li key={index} className="text-base text-tertiary mb-2">
-                        <strong>{member.username}</strong> - &nbsp;{" "}
-                        {member.upiId}
-                      </li>
-                    ))}
+                    {members.map((member, index) =>
+                      index == 0 ? (
+                        <li
+                          key={index}
+                          className="text-base text-tertiary mb-2"
+                        >
+                          <AdminPanelSettings classname="text-3xl mr-2" />
+                          <strong>{member.username}</strong> - &nbsp;{" "}
+                          {member.upiId}
+                        </li>
+                      ) : (
+                        <li
+                          key={index}
+                          className="text-base text-tertiary mb-2"
+                        >
+                          <strong>{member.username}</strong> - &nbsp;{" "}
+                          {member.upiId}
+                        </li>
+                      )
+                    )}
                   </ul>
                 </div>
               </div>

@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import { Group } from "@/models/group.model";
 import { Transaction } from "@/models/transaction.model";
 import User from "@/models/user.model";
+import upiqr from "upiqr";
 
 import { NextResponse } from "next/server";
 
@@ -28,10 +29,16 @@ export async function POST(req) {
       const sender = await User.findById(finalArray[i].sender);
       const receiver = await User.findById(finalArray[i].receiver);
       const amount = finalArray[i].amount;
+      const upi = await upiqr({
+        payeeVPA: receiver.upiId,
+        payeeName: receiver.username,
+        amount: amount,
+      });
       finalTransactionArray.push({
         sender: sender.username,
         receiver: receiver.username,
         amount,
+        src: upi.qr,
       });
     }
 
