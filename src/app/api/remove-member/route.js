@@ -13,12 +13,6 @@ export async function POST(req) {
 
     // Find the group by groupId
     const group = await Group.findOne({ _id: groupId });
-    // console.log("Group Contains Group ID:", group._id == groupId);
-    // console.log(
-    //   "Group Contains Transaction ID:",
-    //   group.transactionArray.includes(transactionId)
-    // );
-    // console.log("fetched:", group);
 
     if (!group) {
       return NextResponse.json({ status: 404, message: "Group not found" });
@@ -33,12 +27,6 @@ export async function POST(req) {
       }
     );
 
-    // console.log("result:", result);
-
-    // const gp = await Group.findOne({ _id: groupId });
-    // console.log("updated: ", gp);
-
-    // Send a success response
     return NextResponse.json({
       status: 200,
       message: "Member removed successfully",

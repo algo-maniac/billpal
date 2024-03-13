@@ -6,6 +6,7 @@ import DensityMediumIcon from "@mui/icons-material/DensityMedium";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
+import { Person } from "@mui/icons-material";
 
 function Navbar() {
   const [dropdownListActivity, setDropDownListActivity] = useState(0);
@@ -82,6 +83,7 @@ function Navbar() {
           <div
             className={`cursor-pointer sm:w-[30%] w-[40px] flex flex-row justify-center items-center rounded-full font-bold`}
           >
+            <Person className="mr-1" />
             {session.user.name}
             {/* <Image
               src={"/images/self.png"}

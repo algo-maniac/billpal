@@ -9,7 +9,7 @@ export async function POST(req) {
     await connectDB();
 
     // Extract data from the request body
-    const { groupId } = await req.json();
+    const { groupId, memberId } = await req.json();
     console.log(groupId);
 
     // Find the group by groupId
@@ -19,10 +19,21 @@ export async function POST(req) {
       return NextResponse.json({ status: 404, message: "Group not found" });
     }
 
+    const isAdmin =
+      group.memberArray.length > 0 &&
+      group.memberArray[0].toString() === memberId;
+
+    if (!isAdmin) {
+      return NextResponse.json({
+        status: 403,
+        message: "You are not authorized to delete this group",
+      });
+    }
+
     let transactionArray = group.transactionArray;
     let len = transactionArray.length;
     for (let i = 0; i < len; i++) {
-      let currTransaction = Transaction.findById(transactionArray[i]);
+      let currTransaction = await Transaction.findById(transactionArray[i]);
       if (currTransaction) {
         await Transaction.findByIdAndDelete(transactionArray[i]);
       }
