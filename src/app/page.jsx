@@ -79,7 +79,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <div className="font-face">
       <Toaster position="top-right" reverseOrder={false} className="absolute" />
       {newGroupModal ? (
         <div className="modal-animation fixed top-16 left-[50%] mx-auto z-20 text-tertiary flex flex-col justify-center w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] rounded-lg m-10 p-5 shadow-md shadow-slate-700 bg-primary">
@@ -90,7 +90,9 @@ export default function Home() {
           </div>
           <form className="text-xl flex flex-col justify-around">
             <div className="flex flex-col my-4">
-              <div>Group Name</div>
+              <div>
+                <strong>Group Name</strong>
+              </div>
               <input
                 type="text"
                 onChange={(e) => {
@@ -102,7 +104,9 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col my-4">
-              <div>Password</div>
+              <div>
+                <strong>Password</strong>
+              </div>
               <input
                 type="password"
                 onChange={(e) => {
@@ -114,7 +118,9 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col my-4">
-              <div>Description (MAX 20 words)</div>
+              <div>
+                <strong>Description (MAX 20 words)</strong>
+              </div>
               <input
                 type="text"
                 onChange={(e) => {
@@ -186,7 +192,7 @@ export default function Home() {
         </div>
       ) : null}
       <div
-        className={`${newGroupModal || existingGroupModal ? "blur-sm overflow-hidden" : ""} flex flex-col justify-center h-full p-4`}
+        className={`${newGroupModal || existingGroupModal ? "blur-lg overflow-hidden" : ""} flex flex-col justify-center h-full p-4`}
         onClick={() => {
           if (newGroupModal === 1) {
             setNewGroupModal(0);

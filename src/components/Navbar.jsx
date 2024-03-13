@@ -12,7 +12,7 @@ function Navbar() {
   // const session = await getServerSession(options);
   const { data: session } = useSession();
   return (
-    <nav className="navbar-shade bg-primary text-tertiary flex flex-row items-center w-full py-3 sticky top-0 z-50">
+    <nav className="font-face text-white gradient-light bg-primary flex flex-row items-center w-full py-3 sticky top-0 z-50">
       <DensityMediumIcon
         className="md:invisible md:w-0 pl-1 cursor-pointer"
         onClick={() => {
@@ -48,10 +48,10 @@ function Navbar() {
         </ul>
       ) : null}
 
-      <div className="text-2xl font-extrabold  basis-1/3 md:basis-[20%] flex items-center justify-center">
+      <div className="text-white text-2xl font-extrabold  basis-1/3 md:basis-[20%] flex items-center justify-center">
         Splitterz
       </div>
-      <ul className="flex flex-row justify-center basis-0 md:basis-[40%] invisible w-0 md:visible">
+      <ul className="text-white flex flex-row justify-center basis-0 md:basis-[40%] invisible w-0 md:visible">
         <li className="hover:underline underline-offset-4 px-2 mx-2 cursor-pointer">
           <Link
             href="/"
