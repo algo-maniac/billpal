@@ -98,6 +98,13 @@ const GroupPage = ({ params }) => {
       groupId: params.id,
       memberId: session.user.id,
     });
+
+    if (response.data.status === 200) {
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.data.message);
+    }
+
     // setMemberArray(response.data.membersList);
     router.replace("/groups");
   };
@@ -128,6 +135,8 @@ const GroupPage = ({ params }) => {
       ...prevState,
       members: updatedMembers,
     }));
+
+    console.log(transactionDetails);
   };
 
   const handleMemberAmountChange = (index, amount) => {
@@ -158,6 +167,8 @@ const GroupPage = ({ params }) => {
 
   const transactionSubmitHandler = async (e) => {
     try {
+      console.log(transactionDetails);
+      // console.log("ADFJSDOifaohfodofenofoeh");
       const response = await axios.post("/api/create-transaction", {
         transactionDetails, // sender, receiver, amount
         groupId: params.id,
@@ -167,7 +178,8 @@ const GroupPage = ({ params }) => {
       });
 
       console.log(response.data);
-      router.replace("/groups");
+      setFetchingRequired((prev) => !prev);
+      router.replace("/");
     } catch (error) {
       console.log(error);
     }
@@ -176,7 +188,7 @@ const GroupPage = ({ params }) => {
   const addMember = (e) => {
     e.preventDefault();
     const newId = transactionDetails.members.length;
-    if (newId > 5) return;
+    if (newId >= members.length) return;
     const newMember = {
       id: newId,
       name: "",
@@ -232,16 +244,34 @@ const GroupPage = ({ params }) => {
     }
   };
 
+  const [loader, setLoader] = useState(1);
   const [fetchingRequired, setFetchingRequired] = useState(0);
+
+  // useEffect(()=>)
   useEffect(() => {
     getAllMembers();
     getAllTransactions();
-  }, []);
+  }, [loader, setLoader, fetchingRequired, setFetchingRequired]);
+
   const [members, setMembers] = useState([]);
+  useEffect(() => {
+    // Create a new list of members with the provided names
+    const newMembersList = members.map((member, index) => ({
+      id: index, // Assuming IDs start from 1
+      name: member.username,
+      amountPaid: 0, // Default amount paid as 0
+    }));
+
+    // Update the transactionDetails state with the new members list
+    setTransactionDetails((prevState) => ({
+      ...prevState,
+      members: newMembersList,
+    }));
+
+    console.log(transactionDetails);
+  }, [members]);
 
   const [transactions, setTransactions] = useState([]);
-
-  const [loader, setLoader] = useState(1);
 
   const [transactionFormModal, setTransactionFormModal] = useState(0);
 
@@ -266,7 +296,7 @@ const GroupPage = ({ params }) => {
         {transactionFormModal ? (
           <div
             id="transaction"
-            className="modal-animation overflow-y-scroll h-[500px] fixed left-[50%] mx-auto z-20 text-tertiary flex flex-col justify-start w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] rounded-lg m-12 p-5 shadow-md shadow-slate-700 bg-primary"
+            className="modal-animation overflow-y-scroll h-[500px] fixed left-[50%] mx-auto z-40 text-tertiary flex flex-col justify-start w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] rounded-lg m-12 p-5 shadow-md shadow-slate-700 bg-primary"
           >
             <div
               className={` text-md text-center border-2 border-secondary bg-secondary rounded-xl w-[70%] mx-auto p-2`}
@@ -316,6 +346,7 @@ const GroupPage = ({ params }) => {
                           onChange={(e) =>
                             handleMemberNameChange(index, e.target.value)
                           }
+                          defaultValue={member.name}
                           className="p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
                         >
                           {members.map((mem, idx) => (
@@ -333,6 +364,7 @@ const GroupPage = ({ params }) => {
                           onChange={(e) =>
                             handleMemberAmountChange(index, e.target.value)
                           }
+                          onWheel={(e) => e.target.blur()}
                           className="p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
                         />
                       </div>
@@ -373,9 +405,9 @@ const GroupPage = ({ params }) => {
             >
               <strong>Transactions to be done</strong>
             </h3>
-            <div className="mt-2 ">
+            <div className="mt-2">
               {finalTransactionList.map((transaction, index) => (
-                <div key={index} className="grid grid-cols-4 gap-4 mb-4">
+                <div key={index} className="z-50 grid grid-cols-4 gap-4 mb-4">
                   <div>
                     <p className="font-semibold">Sender:</p>
                     <p>{transaction.sender}</p>
@@ -460,7 +492,7 @@ const GroupPage = ({ params }) => {
                           key={index}
                           className="text-base text-tertiary mb-2"
                         >
-                          <AdminPanelSettings classname="text-3xl mr-2" />
+                          <AdminPanelSettings className="text-3xl mr-2" />
                           <strong>{member.username}</strong> - &nbsp;{" "}
                           {member.upiId}
                         </li>

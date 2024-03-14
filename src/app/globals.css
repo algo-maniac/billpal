@@ -20,7 +20,7 @@ html::-webkit-scrollbar-track {
 }
 
 html::-webkit-scrollbar-thumb {
-    background-color: #060b9a;
+  background-color: #00a096;
 }
 
 #transaction::-webkit-scrollbar {
@@ -33,22 +33,27 @@ html::-webkit-scrollbar-thumb {
 }
 
 #transaction::-webkit-scrollbar-thumb {
-  background-color: #060b9a;
+  background-color: #00a096;
 }
 
 
-  /* .form-shade {
-    background: linear-gradient(45deg, #004EA2 40%, #0065BC 60%, #007BD6 80%);
+  .form-shade {
+    background: linear-gradient(45deg, #40E0D0 40%, #bceae6 60%, #40E0D0 80%);
   }
-   */
+  
 .navbar-shade{
   background: linear-gradient(45deg, #0044A7 60%, #0056C5 30%, #98c8ff 10%);
 
 }
 
-/* body{
-  background: linear-gradient(45deg, #0056C5 20%, #0078E3 40%, #5DA8FF 60%);
-} */
+body{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(45deg, #64fff0 40%, #ffffff 60%, #64fff0 80%);
+}
 
 /* cyrillic-ext */
 @font-face {

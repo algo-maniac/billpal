@@ -8,7 +8,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 function Footer() {
   return (
-    <footer className="gradient-light text-tertiary flex flex-col bg-primary bottom-0 right-0 left-0 z-30">
+    <footer className="gradient-light mt-auto text-tertiary flex flex-col bg-primary">
       {/* <hr className="bg-tertiary h-[2px] w-[100%] mt-20" />
       <br /> */}
       <div className="flex flex-col  justify-around items-center p-4 ">

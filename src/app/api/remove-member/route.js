@@ -18,6 +18,9 @@ export async function POST(req) {
       return NextResponse.json({ status: 404, message: "Group not found" });
     }
 
+    if (group.memberArray.length === 1) {
+      await Group.deleteOne({ _id: groupId });
+    }
     await Group.updateOne(
       { _id: groupId },
       {
@@ -29,7 +32,7 @@ export async function POST(req) {
 
     return NextResponse.json({
       status: 200,
-      message: "Member removed successfully",
+      message: "Group left",
     });
   } catch (error) {
     console.error("Error removing member:", error);

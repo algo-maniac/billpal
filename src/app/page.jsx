@@ -90,37 +90,32 @@ export default function Home() {
           </div>
           <form className="text-xl flex flex-col justify-around">
             <div className="flex flex-col my-4">
-              <div>
-                <strong>Group Name</strong>
-              </div>
+              <div>Group Name</div>
               <input
                 type="text"
                 onChange={(e) => {
                   setNewGroup({ ...newGroup, groupName: e.target.value });
                 }}
                 value={newGroup.groupName}
-                className="my-2 p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
+                // className="my-2 p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
+                className="m-1 outline-none w-full px-2 py-1 bg-primary border-2 border-tertiary rounded-lg"
               />
             </div>
 
             <div className="flex flex-col my-4">
-              <div>
-                <strong>Password</strong>
-              </div>
+              <div>Password</div>
               <input
                 type="password"
                 onChange={(e) => {
                   setNewGroup({ ...newGroup, groupPassword: e.target.value });
                 }}
                 value={newGroup.groupPassword}
-                className="my-2 p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
+                className="m-1 outline-none w-full px-2 py-1 bg-primary border-2 border-tertiary rounded-lg"
               />
             </div>
 
             <div className="flex flex-col my-4">
-              <div>
-                <strong>Description (MAX 20 words)</strong>
-              </div>
+              <div>Description (MAX 20 words)</div>
               <input
                 type="text"
                 onChange={(e) => {
@@ -130,7 +125,7 @@ export default function Home() {
                   });
                 }}
                 value={newGroup.groupDescription}
-                className="my-2 p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
+                className="m-1 outline-none w-full px-2 py-1 bg-primary border-2 border-tertiary rounded-lg"
               />
             </div>
 
@@ -163,7 +158,7 @@ export default function Home() {
                   });
                 }}
                 value={existingGroup.groupName}
-                className="my-2 p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
+                className="m-1 outline-none w-full px-2 py-1 bg-primary border-2 border-tertiary rounded-lg"
               />
             </div>
             <div className="flex flex-col my-4">
@@ -177,7 +172,7 @@ export default function Home() {
                   });
                 }}
                 value={existingGroup.groupPassword}
-                className="my-2 p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
+                className="m-1 outline-none w-full px-2 py-1 bg-primary border-2 border-tertiary rounded-lg"
               />
             </div>
 
