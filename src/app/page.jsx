@@ -199,7 +199,7 @@ export default function Home() {
       >
         <div className={`flex flex-col items-center justify-center`}>
           <div className="text-xl sm:text-xl md:text-3xl lg:text-5xl text-tertiary text-center mt-10">
-            Welcome to Splitterz
+            Welcome to BillPal
           </div>
           <div className="text-md sm:text-lg md:text-xl lg:text-2xl text-tertiary text-center mt-10 mb-5">
             Simplify Your Group Expenses
@@ -216,14 +216,14 @@ export default function Home() {
             Look no further!
           </div>
           <div className="text-md sm:text-lg md:text-xl lg:text-2xl text-tertiary text-center mt-10">
-            Introducing Splitterz: Your Solution to Hassle-Free Bill Splitting
+            Introducing BillPal: Your Solution to Hassle-Free Bill Splitting
           </div>
 
           <div className="text-md sm:text-lg md:text-xl lg:text-2xl text-tertiary text-center mt-10">
-            With Splitterz, managing group expenses has never been easier.
-            Whether you're sharing a meal, splitting rent, or organizing a trip,
-            our app streamlines the process so you can focus on making memories,
-            not math.
+            With BillPal, managing group expenses has never been easier. Whether
+            you're sharing a meal, splitting rent, or organizing a trip, our app
+            streamlines the process so you can focus on making memories, not
+            math.
           </div>
         </div>
 
@@ -264,12 +264,12 @@ export default function Home() {
             />
             <StyleCard
               description={
-                "Add Expenses: Input what you've paid for, and let SplitEase do the rest. Easily assign who paid for what, and watch as the app calculates everyone's share."
+                "Add Expenses: Input what you've paid for, and let BillPal do the rest. Easily assign who paid for what, and watch as the app calculates everyone's share."
               }
             />
             <StyleCard
               description={
-                "Fair and Transparent: No more confusion or awkward conversations. SplitEase shows exactly who owes what, making settling up a breeze."
+                "Fair and Transparent: No more confusion or awkward conversations. BillPal shows exactly who owes what, making settling up a breeze."
               }
             />
             <StyleCard
@@ -284,7 +284,7 @@ export default function Home() {
         <br />
         <div className="flex flex-col justify-center items-center text-lg sm:text-xl md:text-2xl lg:text-4xl my-20">
           <div className="my-6 form-shade p-3 rounded-lg shadow-sm shadow-tertiary">
-            Why choose Splitterz?
+            Why choose BillPal?
           </div>
           <ul className="flex flex-col justify-around list-disc">
             <li className="m-3 text-lg sm:text-xl">

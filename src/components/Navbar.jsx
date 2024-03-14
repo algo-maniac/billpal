@@ -50,7 +50,7 @@ function Navbar() {
       ) : null}
 
       <div className="text-white text-2xl font-extrabold  basis-1/3 md:basis-[20%] flex items-center justify-center">
-        Splitterz
+        BillPal
       </div>
       <ul className="text-white flex flex-row justify-center basis-0 md:basis-[40%] invisible w-0 md:visible">
         <li className="hover:underline underline-offset-4 px-2 mx-2 cursor-pointer">

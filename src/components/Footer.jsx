@@ -52,7 +52,7 @@ function Footer() {
           <div>Dress</div>
         </div>
       </div>
-      <div className="text-center font-medium">Copyright @splitterz.com</div>
+      <div className="text-center font-medium">Copyright @billpal.com</div>
     </footer>
   );
 }
