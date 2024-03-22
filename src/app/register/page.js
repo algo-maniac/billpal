@@ -88,7 +88,7 @@ function page() {
           className="text-xl flex flex-col justify-around"
         >
           <div className="flex flex-col my-2">
-            <div>Username</div>
+            <div>Banking Name</div>
             <div className="flex border-2 border-tertiary rounded-lg ">
               <input
                 type="text"
