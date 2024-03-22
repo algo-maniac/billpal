@@ -1,4 +1,5 @@
 import { Roboto_Serif, Andada_Pro } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -20,6 +21,7 @@ export default function RootLayout({ children }) {
       <body className={roboto_serif.className}>
         <AuthProvider>
           <Navbar />
+          <Analytics />
           <Toaster
             position="top-right"
             reverseOrder={false}
