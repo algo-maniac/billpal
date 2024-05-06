@@ -32,18 +32,18 @@ function Navbar() {
           </li>
           <li className="p-2 w-[150px] flex justify-center border-y-2 border-primary">
             <Link
-              href="/"
-              className="h-full w-full flex justify-center items-center"
-            >
-              About
-            </Link>
-          </li>
-          <li className="p-2 w-[150px] flex justify-center border-y-2 border-primary">
-            <Link
               href="/groups"
               className="h-full w-full flex justify-center items-center"
             >
               Groups
+            </Link>
+          </li>
+          <li className="p-2 w-[150px] flex justify-center border-y-2 border-primary">
+            <Link
+              href="/calculator"
+              className="h-full w-full flex justify-center items-center"
+            >
+              Calculator
             </Link>
           </li>
         </ul>
@@ -63,18 +63,18 @@ function Navbar() {
         </li>
         <li className="hover:underline underline-offset-4 px-2 mx-2 cursor-pointer">
           <Link
-            href="/"
-            className="h-full w-full flex justify-center items-center"
-          >
-            About
-          </Link>
-        </li>
-        <li className="hover:underline underline-offset-4 px-2 mx-2 cursor-pointer">
-          <Link
             href="/groups"
             className="h-full w-full flex justify-center items-center"
           >
             Groups
+          </Link>
+        </li>
+        <li className="hover:underline underline-offset-4 px-2 mx-2 cursor-pointer">
+          <Link
+            href="/calculator"
+            className="h-full w-full flex justify-center items-center"
+          >
+            Calculator
           </Link>
         </li>
       </ul>
@@ -93,7 +93,7 @@ function Navbar() {
             /> */}
           </div>
           <div
-            className={`coolBeans hover:opacity-100 opacity-85 px-3 cursor-pointer ml-2 w-[35%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
+            className={`coolBeans hover:opacity-100 opacity-85 px-3 cursor-pointer ml-2 h-[30px] sm:h-[50px] w-[25%] sm:w-[25%] flex flex-row justify-center items-center bg-secondary border-2 border-secondary rounded-xl font-bold`}
             onClick={() => signOut()}
           >
             Logout
@@ -103,13 +103,13 @@ function Navbar() {
         <div className="w-[60%] md:basis-[40%] flex flex-row justify-center">
           <Link
             href="/register"
-            className={`coolBeans hover:opacity-100 opacity-85 cursor-pointer px-5 h-[50px] sm:h-[70px] w-[25%] sm:w-[30%] flex flex-row justify-center items-center bg-secondary border-4 border-secondary rounded-xl font-bold`}
+            className={`coolBeans hover:opacity-100 opacity-85 cursor-pointer px-5 h-[30px] sm:h-[50px] w-[25%] sm:w-[25%] flex flex-row justify-center items-center bg-secondary border-4 border-secondary rounded-xl font-bold`}
           >
             Signup
           </Link>
           <Link
             href="/login"
-            className={`coolBeans hover:opacity-100 opacity-85 ml-2 cursor-pointer px-5 h-[50px] sm:h-[70px] w-[25%] sm:w-[30%] flex flex-row justify-center items-center bg-secondary border-4 border-secondary rounded-xl font-bold`}
+            className={`coolBeans hover:opacity-100 opacity-85 ml-2 cursor-pointer px-5 h-[30px] sm:h-[50px] w-[25%] sm:w-[25%] flex flex-row justify-center items-center bg-secondary border-4 border-secondary rounded-xl font-bold`}
           >
             Login
           </Link>

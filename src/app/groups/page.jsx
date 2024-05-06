@@ -42,13 +42,13 @@ function page() {
         <div className="loader mx-auto"></div>
       ) : (
         <div className="">
-          <h1 className="text-3xl font-bold mb-8">Groups</h1>
+          <h1 className="text-tertiary text-3xl font-bold mb-8">Groups</h1>
           {groupArray.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {groupArray.map((group, index) => (
                 <div
                   key={index}
-                  className="coolBeans form-shade text-tertiary cursor-pointer rounded-2xl shadow-lg shadow-secondary p-6"
+                  className="coolBeans form-shade text-tertiary cursor-pointer rounded-2xl p-6"
                   onClick={() => {
                     router.replace(`/groups/${group._id}`);
                   }}
@@ -59,7 +59,7 @@ function page() {
               ))}
             </div>
           ) : (
-            <div>NO GROUPS JOINED !!!</div>
+            <div className="text-tertiary">NO GROUPS JOINED !!!</div>
           )}
         </div>
       )}

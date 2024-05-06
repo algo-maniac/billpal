@@ -6,8 +6,9 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import Typewriter from "typewriter-effect";
 
 export default function Home() {
   const router = useRouter();
@@ -78,13 +79,52 @@ export default function Home() {
     }
   };
 
+  const [typeWriterWord, setTypeWriterWord] = useState("");
+  const words = [
+    "Welcome to BillPal",
+    "Split your expenses!",
+    "Pay your bills",
+  ];
+  let i = 0;
+  let j = 0;
+  let currentWord = "";
+  let isDeleting = false;
+
+  function type() {
+    currentWord = words[i];
+    if (isDeleting) {
+      let curr = currentWord.substring(0, j - 1);
+
+      setTypeWriterWord(curr);
+      j--;
+      if (j == 0) {
+        isDeleting = false;
+        i++;
+        if (i == words.length) {
+          i = 0;
+        }
+      }
+    } else {
+      let curr = currentWord.substring(0, j + 1);
+
+      setTypeWriterWord(curr);
+      j++;
+      if (j == currentWord.length) {
+        isDeleting = true;
+      }
+    }
+    setTimeout(type, 300);
+  }
+  useEffect(() => {
+    type();
+  }, []);
   return (
-    <div className="font-face">
+    <div className="font-mono">
       <Toaster position="top-right" reverseOrder={false} className="absolute" />
       {newGroupModal ? (
-        <div className="modal-animation fixed top-16 left-[50%] mx-auto z-20 text-tertiary flex flex-col justify-center w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] rounded-lg m-10 p-5 shadow-md shadow-slate-700 bg-primary">
+        <div className="form modal-animation fixed top-16 left-[50%] mx-auto z-20 text-tertiary flex flex-col justify-center w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] rounded-lg m-10 p-5 shadow-md shadow-slate-700 bg-primary">
           <div
-            className={`text-3xl text-center border-2 border-secondary bg-secondary rounded-xl w-[60%] mx-auto p-2`}
+            className={`text-3xl text-center border-2 border-blue-800 bg-blue-800 rounded-xl w-[60%] mx-auto p-2`}
           >
             CREATE A GROUP
           </div>
@@ -98,7 +138,7 @@ export default function Home() {
                 }}
                 value={newGroup.groupName}
                 // className="my-2 p-1 px-2 rounded-lg outline-none border-2 border-backup bg-secondary w-full"
-                className="m-1 outline-none w-full px-2 py-1 bg-primary border-2 border-tertiary rounded-lg"
+                className="m-1 outline-none w-full px-2 py-1 border-blue-800 bg-blue-800 rounded-lg"
               />
             </div>
 
@@ -110,7 +150,7 @@ export default function Home() {
                   setNewGroup({ ...newGroup, groupPassword: e.target.value });
                 }}
                 value={newGroup.groupPassword}
-                className="m-1 outline-none w-full px-2 py-1 bg-primary border-2 border-tertiary rounded-lg"
+                className="m-1 outline-none w-full px-2 py-1 border-blue-800 bg-blue-800 rounded-lg"
               />
             </div>
 
@@ -125,7 +165,7 @@ export default function Home() {
                   });
                 }}
                 value={newGroup.groupDescription}
-                className="m-1 outline-none w-full px-2 py-1 bg-primary border-2 border-tertiary rounded-lg"
+                className="m-1 outline-none w-full px-2 py-1 border-blue-800 bg-blue-800 rounded-lg"
               />
             </div>
 
@@ -140,9 +180,9 @@ export default function Home() {
         </div>
       ) : null}
       {existingGroupModal ? (
-        <div className="modal-animation fixed top-20 left-[50%] z-20 mx-auto text-tertiary flex flex-col justify-center w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] rounded-lg m-10 p-5 shadow-md shadow-slate-700 bg-primary">
+        <div className="form modal-animation fixed top-20 left-[50%] z-20 mx-auto text-tertiary flex flex-col justify-center w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] rounded-lg m-10 p-5 shadow-md shadow-slate-700 bg-primary">
           <div
-            className={`text-3xl text-center border-2 border-secondary bg-secondary rounded-xl w-[60%] mx-auto p-2`}
+            className={`text-3xl text-center border-2 border-blue-800 bg-blue-800 rounded-xl w-[60%] mx-auto p-2`}
           >
             JOIN A GROUP
           </div>
@@ -158,7 +198,7 @@ export default function Home() {
                   });
                 }}
                 value={existingGroup.groupName}
-                className="m-1 outline-none w-full px-2 py-1 bg-primary border-2 border-tertiary rounded-lg"
+                className="m-1 outline-none w-full px-2 py-1 border-blue-800 bg-blue-800 rounded-lg"
               />
             </div>
             <div className="flex flex-col my-4">
@@ -172,7 +212,7 @@ export default function Home() {
                   });
                 }}
                 value={existingGroup.groupPassword}
-                className="m-1 outline-none w-full px-2 py-1 bg-primary border-2 border-tertiary rounded-lg"
+                className="m-1 outline-none w-full px-2 py-1 border-blue-800 bg-blue-800 rounded-lg"
               />
             </div>
 
@@ -198,44 +238,53 @@ export default function Home() {
         }}
       >
         <div className={`flex flex-col items-center justify-center`}>
-          <div className="text-xl sm:text-xl md:text-3xl lg:text-5xl text-tertiary text-center mt-10">
-            Welcome to BillPal
-          </div>
-          <div className="text-md sm:text-lg md:text-xl lg:text-2xl text-tertiary text-center mt-10 mb-5">
-            Simplify Your Group Expenses
-          </div>
-          <hr className="bg-tertiary text-tertiary border-tertiary h-[2px] w-[100%] mt-20" />
-          <br />
-          <div className="relative h-[300px] md:h-[400px] lg:h-[500px] xl:h-[600px] w-[90%]">
-            <Image src="/images/landing.jpg" fill alt="Error Loading" />
+          <div className="flex flex-col md:flex-row items-center justify-around">
+            <div className="flex flex-col w-[45%]">
+              <div className="drop-shadow-md typewriter text-2xl sm:text-2xl md:text-3xl lg:text-5xl text-tertiary text-center mt-10">
+                <Typewriter
+                  options={{
+                    strings: [
+                      "Welcome to BillPal",
+                      "Split your expenses",
+                      "Pay your bills",
+                    ],
+                    autoStart: true,
+                    loop: true,
+                  }}
+                />
+              </div>
+              <div className="text-md sm:text-lg md:text-xl lg:text-2xl text-tertiary text-center mt-10 mb-5">
+                Simplify Your Group Expenses
+              </div>
+              <div className="text-sm sm:text-md md:text-md lg:text-lg flex flex-col items-center justify-center">
+                <div className=" text-tertiary text-center mt-10">
+                  Tired of the hassle of splitting bills with friends or
+                  roommates? Look no further! Introducing BillPal: Your Solution
+                  to Hassle-Free Bill Splitting
+                </div>
+                <div className=" text-tertiary text-center mt-10"></div>
+              </div>
+            </div>
+            <div className="relative rounded-full border-2 md:h-[500px] md:w-[500px] sm:w-[400px] sm:h-[400px] w-[200px] h-[200px]">
+              <Image
+                src="/images/landing_image4.jpg"
+                fill
+                alt="Error Loading"
+                className="rounded-full"
+              />
+            </div>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center">
-          <div className="text-md sm:text-lg md:text-xl lg:text-2xl text-tertiary text-center mt-10">
-            Tired of the hassle of splitting bills with friends or roommates?
-            Look no further!
-          </div>
-          <div className="text-md sm:text-lg md:text-xl lg:text-2xl text-tertiary text-center mt-10">
-            Introducing BillPal: Your Solution to Hassle-Free Bill Splitting
-          </div>
 
-          <div className="text-md sm:text-lg md:text-xl lg:text-2xl text-tertiary text-center mt-10">
-            With BillPal, managing group expenses has never been easier. Whether
-            you're sharing a meal, splitting rent, or organizing a trip, our app
-            streamlines the process so you can focus on making memories, not
-            math.
-          </div>
-        </div>
+        {/* <hr className="bg-tertiary text-tertiary border-tertiary h-[2px] w-[100%] mt-20" /> */}
+        {/* <br /> */}
 
-        <hr className="bg-tertiary text-tertiary border-tertiary h-[2px] w-[100%] mt-20" />
-        <br />
-
-        <div className="font-serif sm:flex-row flex-col my-4 text-md sm:text-lg md:text-xl lg:text-3xl flex justify-around items-center">
+        <div className="font-serif sm:flex-row flex-col mt-[200px] my-4 text-md sm:text-lg md:text-xl lg:text-3xl flex justify-around items-center">
           <button
             onClick={() => {
               setNewGroupModal(1);
             }}
-            className="coolBeans hover:opacity-100 opacity-85 m-2 flex items-center justify-center h-[100px] w-[80%] sm:w-[30%] bg-secondary shadow-md shadow-tertiary"
+            className="coolBeans hover:opacity-100 opacity-85 m-2 flex items-center justify-center h-[80px] w-[80%] sm:w-[25%] bg-secondary"
           >
             <Add className="text-3xl mr-2" />
             Create a group
@@ -244,15 +293,15 @@ export default function Home() {
             onClick={() => {
               setExistingGroupModal(1);
             }}
-            className="coolBeans hover:opacity-100 opacity-85 m-2 flex items-center justify-center h-[100px] w-[80%] sm:w-[30%] bg-secondary shadow-md shadow-tertiary"
+            className="coolBeans hover:opacity-100 opacity-85 m-2 flex items-center justify-center h-[80px] w-[80%] sm:w-[25%] bg-secondary"
           >
             <People className="text-3xl mr-2" />
             Join a group
           </button>
         </div>
 
-        <div className="flex flex-col justify-center items-center text-lg sm:text-xl md:text-2xl lg:text-4xl my-20">
-          <div className="my-6 form-shade p-3 rounded-lg shadow-sm shadow-tertiary">
+        <div className="text-tertiary flex flex-col justify-center items-center text-md sm:text-lg md:text-xl lg:text-xl my-20">
+          <div className="my-6 form-shade p-3 rounded-lg border-blue-800 bg-blue-900 shadow-xl">
             How it Works:
           </div>
 
@@ -280,21 +329,21 @@ export default function Home() {
           </div>
         </div>
 
-        <hr className="bg-tertiary text-tertiary border-tertiary h-[2px] w-[100%] mt-20" />
-        <br />
-        <div className="flex flex-col justify-center items-center text-lg sm:text-xl md:text-2xl lg:text-4xl my-20">
-          <div className="my-6 form-shade p-3 rounded-lg shadow-sm shadow-tertiary">
+        {/* <hr className="bg-tertiary text-tertiary border-tertiary h-[2px] w-[100%] mt-20" />
+        <br /> */}
+        <div className="text-tertiary flex flex-col justify-center items-center text-sm sm:text-md md:text-md lg:text-lg my-20">
+          <div className="my-6 form-shade p-3 rounded-lg border-blue-800 bg-blue-900 shadow-xl">
             Why choose BillPal?
           </div>
           <ul className="flex flex-col justify-around list-disc">
-            <li className="m-3 text-lg sm:text-xl">
+            <li className="m-3 text-sm sm:text-md md:text-md lg:text-md">
               Save Time: No more manual calculations or chasing friends for
               money.
             </li>
-            <li className="m-3 text-lg sm:text-xl">
+            <li className="m-3 text-sm sm:text-md md:text-md lg:text-md">
               Stay Organized: All your expenses neatly organized in one place.
             </li>
-            <li className="m-3 text-lg sm:text-xl">
+            <li className="m-3 text-sm sm:text-md md:text-md lg:text-md">
               Avoid Awkwardness: Keep friendships intact with clear, transparent
               splitting.
             </li>

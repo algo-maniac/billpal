@@ -16,7 +16,7 @@ module.exports = {
         primary: "#7FFFD4", // 60%
         secondary: "#40E0D0", // 30%
         backup: "#40E0D0", // 10%
-        tertiary: "black", // text
+        tertiary: "white", // text
       },
       fontFamily: {
         sanSerif: ["San serif", "sans-serif"],

@@ -5,6 +5,8 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import Link from "next/link";
+import { GitHub, YouTube } from "@mui/icons-material";
 
 function Footer() {
   return (
@@ -15,16 +17,30 @@ function Footer() {
         <div className="text-2xl font-bold  p-2">Follow Us</div>
         <ul className="flex flex-row  p-2">
           <li className="p-2">
-            <TwitterIcon />
+            <Link href="https://github.com/algo-maniac/billpal" target="_blank">
+              <GitHub />
+            </Link>
           </li>
           <li className="p-2">
-            <InstagramIcon />
+            <Link
+              href="https://www.linkedin.com/feed/update/urn:li:activity:7176839868398886912/"
+              target="_blank"
+            >
+              <LinkedInIcon />
+            </Link>
           </li>
           <li className="p-2">
-            <FacebookIcon />
+            <Link
+              href="https://www.youtube.com/watch?v=V1iBFpi9QaU"
+              target="_blank"
+            >
+              <YouTube />
+            </Link>
           </li>
           <li className="p-2">
-            <LinkedInIcon />
+            <Link href="https://www.google.com" target="_blank">
+              <InstagramIcon />
+            </Link>
           </li>
         </ul>
       </div>

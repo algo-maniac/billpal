@@ -79,8 +79,8 @@ function page() {
   return (
     <div className="text-tertiary w-full flex flex-col justify-around items-center">
       <Toaster position="top-right" reverseOrder={false} className="absolute" />
-      <div className="flex flex-col bg-primary justify-around w-[85%] sm:w-[60%] md:w-[50%] lg:w-[30%] m-10 p-5 shadow-md shadow-slate-700">
-        <div className="text-3xl text-center border-2 border-secondary bg-secondary rounded-xl w-[60%] mx-auto py-2">
+      <div className="flex flex-col form justify-around w-[85%] sm:w-[60%] md:w-[50%] lg:w-[30%] m-10 p-5 shadow-md shadow-white spread-lg rounded-lg">
+        <div className="text-3xl text-center border-2 border-blue-800 bg-blue-800 rounded-xl w-[60%] mx-auto py-2">
           Sign up
         </div>
         <form
@@ -89,14 +89,14 @@ function page() {
         >
           <div className="flex flex-col my-2">
             <div>Banking Name</div>
-            <div className="flex border-2 border-tertiary rounded-lg ">
+            <div className="flex border-2 border-blue-800 rounded-lg ">
               <input
                 type="text"
                 onChange={(e) => {
                   setUserDetails({ ...userDetails, username: e.target.value });
                 }}
                 value={userDetails.username}
-                className="m-1 outline-none w-full px-1 bg-primary"
+                className="m-1 outline-none w-full border-blue-800 bg-blue-800 rounded-md p-1"
               />
               <span className="icon flex items-center px-4 text-gray-500">
                 <HiOutlineUser size={20} />
@@ -105,14 +105,14 @@ function page() {
           </div>
           <div className="flex flex-col my-2">
             <div>Email</div>
-            <div className="flex border-2 border-tertiary rounded-lg ">
+            <div className="flex border-2 border-blue-800 rounded-lg ">
               <input
                 type="text"
                 onChange={(e) => {
                   setUserDetails({ ...userDetails, email: e.target.value });
                 }}
                 value={userDetails.email}
-                className="m-1 outline-none w-full px-1 bg-primary"
+                className="m-1 outline-none w-full border-blue-800 bg-blue-800 rounded-md p-1"
               />
               <span className="icon flex items-center px-4 text-gray-500">
                 <HiAtSymbol size={20} />
@@ -121,14 +121,14 @@ function page() {
           </div>
           <div className="flex flex-col my-2">
             <div>UPI ID</div>
-            <div className="flex border-2 border-tertiary rounded-lg ">
+            <div className="flex border-2 border-blue-800 rounded-lg ">
               <input
                 type="text"
                 onChange={(e) => {
                   setUserDetails({ ...userDetails, upiId: e.target.value });
                 }}
                 value={userDetails.upiId}
-                className="m-1 outline-none w-full px-1 bg-primary"
+                className="m-1 outline-none w-full border-blue-800 bg-blue-800 rounded-md p-1"
               />
               <span className="icon flex items-center px-4 text-gray-500">
                 <HiAtSymbol size={20} />
@@ -137,14 +137,14 @@ function page() {
           </div>
           <div className="flex flex-col my-2">
             <div>Password</div>
-            <div className="flex border-2 border-tertiary rounded-lg ">
+            <div className="flex border-2 border-blue-800 rounded-lg ">
               <input
                 type={`${show ? "text" : "password"}`}
                 onChange={(e) => {
                   setUserDetails({ ...userDetails, password: e.target.value });
                 }}
                 value={userDetails.password}
-                className="m-1 w-full outline-none px-1 bg-primary"
+                className="m-1 w-full outline-none border-blue-800 bg-blue-800 rounded-md p-1"
               />
               <span
                 className="icon flex items-center px-4 text-gray-500 hover:cursor-pointer hover:text-blue-500"
