@@ -38,14 +38,6 @@ function Navbar() {
               Groups
             </Link>
           </li>
-          <li className="p-2 w-[150px] flex justify-center border-y-2 border-primary">
-            <Link
-              href="/calculator"
-              className="h-full w-full flex justify-center items-center"
-            >
-              Calculator
-            </Link>
-          </li>
         </ul>
       ) : null}
 
@@ -67,14 +59,6 @@ function Navbar() {
             className="h-full w-full flex justify-center items-center"
           >
             Groups
-          </Link>
-        </li>
-        <li className="hover:underline underline-offset-4 px-2 mx-2 cursor-pointer">
-          <Link
-            href="/calculator"
-            className="h-full w-full flex justify-center items-center"
-          >
-            Calculator
           </Link>
         </li>
       </ul>
